@@ -1,8 +1,9 @@
-import questions from '../questions.js';
+import questions, { BANK } from '../questions.js';
 
 const errors = [];
 const assert = (condition, message) => { if (!condition) errors.push(message); };
 const chapters = ['C1', 'C2', 'C3', 'C4'];
+const expectedTopics = 30;
 
 assert(Array.isArray(questions), 'questions phải là một mảng');
 assert(questions.length === 600, `Cần đúng 600 câu, hiện có ${questions.length}`);
@@ -10,21 +11,25 @@ assert(new Set(questions.map((q) => q.id)).size === questions.length, 'ID câu h
 assert(new Set(questions.map((q) => q.question)).size === questions.length, 'Nội dung câu hỏi bị trùng');
 
 for (const chapter of chapters) {
+  const bank = BANK[chapter] ?? [];
   const items = questions.filter((q) => q.chapter === chapter);
+  assert(bank.length === expectedTopics, `${chapter} cần ${expectedTopics} chủ đề, hiện có ${bank.length}`);
   assert(items.length === 150, `${chapter} phải có 150 câu, hiện có ${items.length}`);
+  assert(new Set(bank.map((item) => item.topic)).size === expectedTopics, `${chapter} có tên chủ đề trùng`);
+
   const concepts = new Set(items.map((q) => q.conceptId));
-  assert(concepts.size === 30, `${chapter} phải có 30 khái niệm riêng`);
+  assert(concepts.size === expectedTopics, `${chapter} phải có ${expectedTopics} khái niệm riêng`);
   for (const conceptId of concepts) {
     const variants = items.filter((q) => q.conceptId === conceptId);
-    assert(variants.length === 5, `${conceptId} phải có đúng 5 biến thể câu hỏi`);
+    assert(variants.length === 5, `${conceptId} phải có đúng 5 biến thể`);
     assert(new Set(variants.map((q) => q.setId)).size === 5, `${conceptId} phải xuất hiện trong 5 đề khác nhau`);
+    assert(new Set(variants.map((q) => q.topic)).size === 1, `${conceptId} có topic không đồng nhất`);
   }
 }
 
 for (let setId = 1; setId <= 6; setId++) {
   const set = questions.filter((q) => q.setId === setId);
   assert(set.length === 100, `Đề ${setId} phải có 100 câu, hiện có ${set.length}`);
-  assert(new Set(set.map((q) => q.id)).size === 100, `Đề ${setId} có ID câu bị trùng`);
   assert(new Set(set.map((q) => q.conceptId)).size === 100, `Đề ${setId} có khái niệm bị lặp`);
   for (const chapter of chapters) {
     assert(set.filter((q) => q.chapter === chapter).length === 25, `Đề ${setId} không đủ 25 câu ${chapter}`);
@@ -40,7 +45,7 @@ const shuffle = (items) => {
   }
   return copy;
 };
-for (let run = 0; run < 30; run++) {
+for (let run = 0; run < 100; run++) {
   const drawn = [];
   for (const chapter of chapters) {
     const byConcept = new Map();
@@ -66,19 +71,49 @@ for (const q of questions) {
   assert(Array.isArray(q.options) && q.options.length === 4, `Câu ${q.id} không có đúng 4 lựa chọn`);
   assert(new Set(q.options).size === 4, `Câu ${q.id} có lựa chọn trùng nhau`);
   assert(Number.isInteger(q.answerIndex) && q.answerIndex >= 0 && q.answerIndex < 4, `Câu ${q.id} có answerIndex sai`);
-  assert(q.options[q.answerIndex] !== undefined, `Câu ${q.id} không có đáp án đúng`);
   assert(typeof q.explanation === 'string' && q.explanation.trim().length > 15, `Câu ${q.id} thiếu giải thích`);
   assert(q.setId >= 1 && q.setId <= 6, `Câu ${q.id} có setId không hợp lệ`);
+  assert(['Cơ bản', 'Tính toán cơ bản'].includes(q.difficulty), `Câu ${q.id} có nhãn độ khó ngoài phạm vi thiết kế lại`);
 }
 
-// Subnet sanity checks used as regression guards for common answers in the bank.
-const lookup = (snippet) => questions.find((q) => q.question.includes(snippet));
-const host26 = questions.find((q) => q.topic === 'Hosts in /26');
-assert(host26?.options[host26?.answerIndex] === '62 host.', 'Kiểm tra đáp án /26 host count thất bại');
-assert(lookup('192.168.1.70/26')?.options[lookup('192.168.1.70/26')?.answerIndex] === '192.168.1.64/26.', 'Kiểm tra Network ID /26 thất bại');
-assert(lookup('192.168.1.64/26')?.options[lookup('192.168.1.64/26')?.answerIndex] === '192.168.1.127.', 'Kiểm tra broadcast /26 thất bại');
-assert(questions.find((q) => q.topic === 'IPv4 Total Length field')?.options[questions.find((q) => q.topic === 'IPv4 Total Length field')?.answerIndex] === '16 bit.', 'Kiểm tra IPv4 Total Length 16-bit thất bại');
-assert(questions.find((q) => q.topic === 'IPv6 Payload Length field')?.options[questions.find((q) => q.topic === 'IPv6 Payload Length field')?.answerIndex] === '16 bit.', 'Kiểm tra IPv6 Payload Length 16-bit thất bại');
+const answerOf = (topic) => {
+  const q = questions.find((item) => item.topic === topic);
+  return q ? q.options[q.answerIndex] : undefined;
+};
+const requireAnswer = (topic, expected) => assert(answerOf(topic) === expected, `Đáp án kiểm tra hồi quy thất bại: ${topic}`);
+
+requireAnswer('IPv4 address length', '32 bit.');
+requireAnswer('IPv6 address length', '128 bit.');
+requireAnswer('IPv4 header length', '20 byte.');
+requireAnswer('IPv6 base header length', '40 byte.');
+requireAnswer('IP length fields', '16 bit.');
+requireAnswer('TCP header minimum length', '20 byte.');
+requireAnswer('TCP header maximum length', '60 byte.');
+requireAnswer('TCP source and destination ports', '16 bit mỗi trường.');
+requireAnswer('TCP sequence number field', '32 bit.');
+requireAnswer('TCP acknowledgment field', '32 bit.');
+requireAnswer('TCP data offset', '4 bit.');
+requireAnswer('TCP checksum field', '16 bit.');
+requireAnswer('UDP header length', '8 byte.');
+requireAnswer('UDP port fields', '16 bit mỗi trường.');
+requireAnswer('UDP length field', 'Toàn bộ UDP datagram, gồm header và dữ liệu.');
+requireAnswer('UDP checksum field', '16 bit.');
+requireAnswer('Well-known ports', '0 đến 1023.');
+requireAnswer('HTTP and HTTPS ports', '80 và 443.');
+requireAnswer('FTP and DNS ports', '21 và 53.');
+requireAnswer('SMTP, POP3, IMAP and DHCP ports', 'SMTP 25; POP3 110; IMAP 143; DHCPv4 server/client UDP 67/68.');
+requireAnswer('Client-server distribution time', 'Dcs ≥ max(NF/us, F/dmin).');
+requireAnswer('P2P distribution time', 'Dp2p ≥ max(F/us, F/dmin, NF/(us + tổng ui)).');
+requireAnswer('Subnet mask /24', '255.255.255.0.');
+requireAnswer('Subnet mask /25', '255.255.255.128.');
+requireAnswer('Subnet mask /26', '255.255.255.192.');
+requireAnswer('Subnet mask /27', '255.255.255.224.');
+requireAnswer('Usable hosts /24', '254 host.');
+requireAnswer('Usable hosts /26', '62 host.');
+requireAnswer('Network address calculation', '192.168.1.64/26.');
+requireAnswer('Broadcast address calculation', '192.168.1.127.');
+requireAnswer('Usable host range /27', '192.168.10.33 đến 192.168.10.62.');
+requireAnswer('Private and public IP', '10.0.0.0/8; 172.16.0.0/12; 192.168.0.0/16.');
 
 if (errors.length) {
   console.error(`FAIL — ${errors.length} lỗi:`);
@@ -86,10 +121,9 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log('PASS — Ngân hàng câu hỏi hợp lệ.');
-console.log('• 600 câu hỏi, ID và nội dung duy nhất.');
-console.log('• 150 câu mỗi chương; mỗi chương có 30 khái niệm.');
-console.log('• 6 đề cố định × 100 câu; mỗi đề có 25 câu/chương.');
-console.log('• Mỗi khái niệm có 5 biến thể; 6 đề và 30 lượt random mô phỏng đều cân bằng 25 câu/chương.');
-console.log('• Không lặp khái niệm trong từng đề; options/đáp án/giải thích hợp lệ.');
-console.log('• Các phép tính subnetting trọng tâm đã qua kiểm tra hồi quy.');
+console.log('PASS — Ngân hàng câu hỏi sau khi biên tập lại hợp lệ.');
+console.log('• 600 câu, 4 chương × 150 câu; 30 chủ đề mỗi chương.');
+console.log('• 6 đề cố định × 100 câu; mỗi đề có đúng 25 câu/chương.');
+console.log('• Mỗi chủ đề có 5 cách hỏi, không lặp trong cùng đề.');
+console.log('• 100 lượt random mô phỏng đều có 100 câu và 25 câu/chương.');
+console.log('• Đáp án, lựa chọn, lời giải và các giá trị subnet/header/port trọng tâm đã qua kiểm tra.');

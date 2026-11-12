@@ -79,7 +79,7 @@ function renderHome() {
       <div class="hero-copy">
         <div class="kicker">Computer networks · Midterm prep</div>
         <h1>Nắm chắc <span class="gradient-word">mạng máy tính.</span></h1>
-        <p class="hero-lede">Luyện tập có chiến lược, hiểu bản chất từng tầng mạng và tự tin bước vào bài thi giữa kỳ. 600 câu hỏi trắc nghiệm kèm giải thích, bám sát đề cương ôn tập của bạn.</p>
+        <p class="hero-lede">Luyện tập kiến thức nhập môn, nắm chắc chức năng từng tầng mạng và tự tin bước vào bài thi giữa kỳ. 600 câu hỏi ở mức cơ bản, kèm giải thích và bám theo đề cương ôn tập của bạn.</p>
         <div class="hero-tags"><span>4 chương trọng tâm</span><span>100 câu / lượt</span><span>Giải thích ngay</span></div>
       </div>
       <div class="hero-visual" aria-hidden="true">
@@ -122,7 +122,7 @@ function renderHome() {
           <p class="fine-print">Mỗi câu hiện lần lượt · Chọn đáp án để xem giải thích · Có thể nộp bài sớm</p>
         </div>
         <aside class="panel info-panel">
-          <div><h3>Ôn tập có hệ thống</h3><p>Kho câu hỏi được chia theo kiến thức trọng tâm để bạn không bị lệch chương khi luyện đề.</p></div>
+          <div><h3>Ôn tập có hệ thống</h3><p>Ngân hàng được biên tập ở mức cơ bản, chia đều theo 4 chương và ưu tiên đúng các nội dung trong đề cương ôn tập.</p></div>
           <div class="info-stat-grid">
             <div class="info-stat"><b>600</b><span>Câu hỏi</span></div>
             <div class="info-stat"><b>06</b><span>Đề cân bằng</span></div>

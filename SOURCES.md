@@ -1,6 +1,6 @@
 # Nguồn tham khảo kiến thức
 
-Các câu hỏi trong dự án được tự biên soạn theo đề cương người học cung cấp. Danh sách dưới đây là tài liệu chuẩn để đối chiếu khái niệm và thông số giao thức; **không phải nguồn đề thi TDTU** và không xác nhận các câu hỏi từng xuất hiện trong kỳ thi của trường.
+Ngân hàng câu hỏi trong dự án được tự biên soạn theo đề cương ôn tập người học cung cấp. Danh sách dưới đây là tài liệu kỹ thuật gốc để đối chiếu các kiến thức mạng cơ bản; **không phải đề thi TDTU** và không xác nhận câu hỏi từng xuất hiện trong bài thi của trường.
 
 ## RFC / tiêu chuẩn giao thức
 
@@ -24,6 +24,6 @@ Các câu hỏi trong dự án được tự biên soạn theo đề cương ng�
 
 ## Giáo trình tham khảo
 
-- James F. Kurose và Keith W. Ross, *Computer Networking: A Top-Down Approach* — các chương về Application, Transport, Network và nguyên lý mạng.
+- James F. Kurose và Keith W. Ross, *Computer Networking: A Top-Down Approach* — các chương về Application, Transport, Network và nguyên lý mạng. Công thức phân phối file Client-Server/P2P trong ngân hàng được diễn đạt theo phần File Distribution của giáo trình.
 
-> Lưu ý: số hiệu RFC dùng để tra cứu tài liệu kỹ thuật gốc. Khi ôn thi, hãy ưu tiên cách phân loại, thuật ngữ và quy ước mà giảng viên TDTU đang sử dụng trong slide/bài giảng.
+> Lưu ý: tài liệu chuẩn giúp đối chiếu nội dung kỹ thuật. Cách phân loại, phạm vi câu hỏi và quy ước cụ thể trong kỳ thi cần được đối chiếu thêm với slide/bài giảng của giảng viên TDTU.
