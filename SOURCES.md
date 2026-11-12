@@ -35,8 +35,17 @@ Ngân hàng câu hỏi trong dự án được tự biên soạn dựa trên: (1
 
 > Lưu ý nội dung: WPA2/AES mạnh hơn WEP và WPA đời đầu trong nhóm chuẩn được ghi trong tài liệu học. Tuy nhiên, WPA3 là thế hệ mới hơn; không nên ghi WPA2 là chuẩn mạnh nhất hiện nay theo nghĩa tuyệt đối. Khi đề thi chỉ so sánh WEP, WPA và WPA2, WPA2/AES là đáp án phù hợp trong ba lựa chọn đó.
 
+## Đề mẫu người học cung cấp
+
+- Bộ câu hỏi trắc nghiệm tiếng Việt do người học dán trong cuộc trò chuyện. Dùng để tham khảo phong cách câu hỏi tình huống, câu hỏi chọn giải pháp, topology, VLAN/VPN, thiết bị mạng, OSI, TCP handshake, PDU, Ethernet/Wi-Fi, nhận diện địa chỉ IP và chuyển đổi nhị phân/thập phân/thập lục phân. Đây là tài liệu tham khảo do người học cung cấp; không xác minh được xuất xứ, không coi là đề thi chính thức TDTU và không sao chép nguyên văn toàn bộ. Một số câu trong bản dán bị lỗi định dạng hoặc thiếu lựa chọn nên chỉ sử dụng phần nội dung có thể xác định chắc chắn.
+
 ## Giáo trình tham khảo
 
 - James F. Kurose và Keith W. Ross, *Computer Networking: A Top-Down Approach* — các chương về Application, Transport, Network và nguyên lý mạng. Công thức phân phối file Client-Server/P2P trong ngân hàng được diễn đạt theo phần File Distribution của giáo trình.
 
 > Lưu ý: tài liệu chuẩn giúp đối chiếu nội dung kỹ thuật. Cách phân loại, phạm vi câu hỏi và quy ước cụ thể trong kỳ thi cần được đối chiếu thêm với slide/bài giảng của giảng viên TDTU.
+
+
+## Định hướng cách đặt câu hỏi
+
+- Đề trắc nghiệm mẫu do người học cung cấp trong cuộc trò chuyện: dùng để tham khảo cách đặt câu hỏi tình huống, yêu cầu chọn giải pháp phù hợp và nhận diện kết quả trong bối cảnh thực tế. Không xác minh được nguồn gốc của bản trích; không khẳng định là đề thi TDTU chính thức.

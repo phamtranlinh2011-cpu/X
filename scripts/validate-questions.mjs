@@ -3,10 +3,10 @@ import questions, { BANK } from '../questions.js';
 const errors = [];
 const assert = (condition, message) => { if (!condition) errors.push(message); };
 const chapters = ['C1', 'C2', 'C3', 'C4'];
-const expectedTopics = 30;
+const expectedTopics = 40;
 
 assert(Array.isArray(questions), 'questions phải là một mảng');
-assert(questions.length === 600, `Cần đúng 600 câu, hiện có ${questions.length}`);
+assert(questions.length === 800, `Cần đúng 800 câu, hiện có ${questions.length}`);
 assert(new Set(questions.map((q) => q.id)).size === questions.length, 'ID câu hỏi bị trùng');
 assert(new Set(questions.map((q) => q.question)).size === questions.length, 'Nội dung câu hỏi bị trùng');
 
@@ -14,7 +14,7 @@ for (const chapter of chapters) {
   const bank = BANK[chapter] ?? [];
   const items = questions.filter((q) => q.chapter === chapter);
   assert(bank.length === expectedTopics, `${chapter} cần ${expectedTopics} chủ đề, hiện có ${bank.length}`);
-  assert(items.length === 150, `${chapter} phải có 150 câu, hiện có ${items.length}`);
+  assert(items.length === 200, `${chapter} phải có 200 câu, hiện có ${items.length}`);
   assert(new Set(bank.map((item) => item.topic)).size === expectedTopics, `${chapter} có tên chủ đề trùng`);
 
   const concepts = new Set(items.map((q) => q.conceptId));
@@ -30,7 +30,7 @@ for (const chapter of chapters) {
   }
 }
 
-for (let setId = 1; setId <= 6; setId++) {
+for (let setId = 1; setId <= 8; setId++) {
   const set = questions.filter((q) => q.setId === setId);
   assert(set.length === 100, `Đề ${setId} phải có 100 câu, hiện có ${set.length}`);
   assert(new Set(set.map((q) => q.conceptId)).size === 100, `Đề ${setId} có khái niệm bị lặp`);
@@ -74,19 +74,20 @@ for (let run = 0; run < 100; run++) {
 
 const overallAnswerPositions = [0, 0, 0, 0];
 for (const q of questions) overallAnswerPositions[q.answerIndex]++;
-assert(overallAnswerPositions.every((count) => count === 150), `Toàn bộ ngân hàng phải cân bằng 150 đáp án ở mỗi vị trí A/B/C/D; hiện có ${overallAnswerPositions.join('/')}`);
+assert(overallAnswerPositions.every((count) => count === 200), `Toàn bộ ngân hàng phải cân bằng 200 đáp án ở mỗi vị trí A/B/C/D; hiện có ${overallAnswerPositions.join('/')}`);
 
 const calculationCount = questions.filter((q) => q.difficulty === 'Tính toán cơ bản').length;
 assert(calculationCount === 40, `Cần 40 câu tính toán cơ bản (8 chủ đề × 5), hiện có ${calculationCount}`);
-assert(questions.length - calculationCount === 560, 'Cần 560 câu cơ bản');
+assert(questions.length - calculationCount === 760, 'Cần 760 câu cơ bản');
 
 for (const q of questions) {
   assert(typeof q.question === 'string' && q.question.trim().length > 12, `Câu ${q.id} thiếu nội dung`);
+  assert(!/Trong Chương \d|thuộc Chương \d|Khi ôn tập [^,]+ thuộc Chương/.test(q.question), `Câu ${q.id} còn dạng hỏi theo tên chương/chủ đề`);
   assert(Array.isArray(q.options) && q.options.length === 4, `Câu ${q.id} không có đúng 4 lựa chọn`);
   assert(new Set(q.options).size === 4, `Câu ${q.id} có lựa chọn trùng nhau`);
   assert(Number.isInteger(q.answerIndex) && q.answerIndex >= 0 && q.answerIndex < 4, `Câu ${q.id} có answerIndex sai`);
   assert(typeof q.explanation === 'string' && q.explanation.trim().length > 15, `Câu ${q.id} thiếu giải thích`);
-  assert(q.setId >= 1 && q.setId <= 6, `Câu ${q.id} có setId không hợp lệ`);
+  assert(q.setId >= 1 && q.setId <= 8, `Câu ${q.id} có setId không hợp lệ`);
   assert(['Cơ bản', 'Tính toán cơ bản'].includes(q.difficulty), `Câu ${q.id} có nhãn độ khó ngoài phạm vi thiết kế lại`);
 }
 
@@ -102,6 +103,9 @@ requireAnswer('Five-layer Internet stack', 'Application → Transport → Networ
 requireAnswer('Session and Presentation layers', 'Presentation xử lý cách biểu diễn dữ liệu (như chuyển đổi định dạng, mã hóa, nén); Session thiết lập, duy trì và kết thúc phiên làm việc.');
 requireAnswer('PDU names', 'Data/Message → Segment (TCP) hoặc Datagram (UDP) → Packet → Frame → Bit.');
 requireAnswer('IPv4 address length', '32 bit.');
+requireAnswer('Decimal 10 to binary', '00001010.');
+requireAnswer('Binary 11101000 to decimal', '232.');
+requireAnswer('Decimal 10 to hexadecimal', 'A.');
 requireAnswer('IPv6 address length', '128 bit.');
 requireAnswer('IPv4 and IPv6 header length', 'IPv4 tối thiểu 20 byte; IPv6 base header cố định 40 byte.');
 requireAnswer('IP length fields', '16 bit.');
@@ -143,7 +147,7 @@ requireAnswer('IDS', 'Intrusion Detection System – giám sát để phát hi�
 requireAnswer('SPI', 'Theo dõi trạng thái kết nối và đánh giá packet dựa trên trạng thái của phiên giao tiếp.');
 requireAnswer('IPS', 'Intrusion Prevention System – hệ thống ngăn chặn xâm nhập.');
 
-// Network-security regression tests: these concepts must remain represented in the 600-question bank.
+// Network-security regression tests: these concepts must remain represented in the 800-question bank.
 for (const topic of ['WEP security', 'WPA security', 'WPA2 and AES']) {
   assert(BANK.C1.some((item) => item.topic === topic), `Thiếu chủ đề bảo mật Wi-Fi: ${topic}`);
 }
@@ -175,12 +179,12 @@ if (errors.length) {
 }
 
 console.log('PASS — Ngân hàng câu hỏi sau khi biên tập lại hợp lệ.');
-console.log('• 600 câu, 4 chương × 150 câu; 30 chủ đề mỗi chương.');
-console.log('• 6 đề cố định × 100 câu; mỗi đề có đúng 25 câu/chương và 25 đáp án đúng ở mỗi vị trí A/B/C/D.');
+console.log('• 800 câu, 4 chương × 200 câu; 40 chủ đề mỗi chương.');
+console.log('• 8 đề cố định × 100 câu; mỗi đề có đúng 25 câu/chương và 25 đáp án đúng ở mỗi vị trí A/B/C/D.');
 console.log('• Mỗi chủ đề có 5 cách hỏi, không lặp trong cùng đề.');
 console.log('• 100 lượt random mô phỏng đều có 100 câu và 25 câu/chương.');
 console.log('• Các biến thể không dùng lại tình huống lệch đáp án; mọi biến thể cùng một chủ đề có đáp án nhất quán.');
 console.log('• Đã kiểm tra OSI 7 tầng, TCP/IP 4 tầng, IP Stack 5 tầng, PDU, TCP/UDP fields, port và subnet/VLSM.');
 console.log('• Đã kiểm tra WEP/WPA/WPA2-AES, Firewall, IDS/IPS, NAT và SPI; giải thích phân biệt đúng chức năng.');
 console.log('• Đã kiểm tra công thức block size, số bit mượn, số host và prefix VLSM bằng phép tính độc lập.');
-console.log('• Phân loại độ khó: 560 câu cơ bản và 40 câu tính toán subnet cơ bản.');
+console.log('• Phân loại độ khó: 760 câu cơ bản và 40 câu tính toán subnet cơ bản.');

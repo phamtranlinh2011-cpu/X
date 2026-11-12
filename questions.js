@@ -1,11 +1,10 @@
 // NETLAB question bank — revised to stay within the user's TDTU midterm outline.
-// 30 core topics per chapter × 5 question-wording variants = 600 questions.
-// Each fixed set contains 25 topics from each chapter; each topic is absent from one set.
+// 40 core topics per chapter × 5 question variants = 800 questions.
+// Eight fixed sets contain 25 topics from each chapter; each topic appears in five different sets.
 
-// Legacy scenario text is accepted for source-edit compatibility but intentionally not stored or displayed.
-// Each generated variant is a meaning-preserving rephrase of the base question, so its answer cannot drift.
-const entry = (topic, q, a, wrong, explain, _legacyScenario, level = 'Cơ bản') => ({
-  topic, q, a, wrong, explain, level
+// Scenario prompts are retained and used to produce application-oriented question forms.
+const entry = (topic, q, a, wrong, explain, scenario, level = 'Cơ bản') => ({
+  topic, q, a, wrong, explain, scenario, level
 });
 
 const BANK = {
@@ -39,7 +38,17 @@ const BANK = {
     entry('Encapsulation', 'Đóng gói dữ liệu (encapsulation) là quá trình nào?', 'Mỗi tầng thêm thông tin điều khiển của mình vào dữ liệu khi dữ liệu đi từ tầng trên xuống tầng dưới.', ['Xóa toàn bộ header trước khi gửi dữ liệu.', 'Chỉ đổi tên tệp trước khi gửi.', 'Chuyển địa chỉ IP thành mật khẩu.'], 'Khi gửi, dữ liệu đi từ Application xuống các tầng dưới và thường được thêm header (hoặc trailer) tại từng tầng.', 'Khi gửi một thông điệp, dữ liệu lần lượt đi qua Transport, Network rồi Data Link và được thêm thông tin điều khiển. Đây là quá trình gì?'),
     entry('PDU names', 'Tên PDU thường dùng từ tầng Application xuống Physical lần lượt là gì?', 'Data/Message → Segment (TCP) hoặc Datagram (UDP) → Packet → Frame → Bit.', ['Segment → Data → Frame → Packet → Bit.', 'Packet → Segment → Data → Bit → Frame.', 'Bit → Frame → Packet → Segment → Data.'], 'Ghi nhớ: Application là Data/Message; Transport là TCP Segment hoặc UDP Datagram; Network là Packet; Data Link là Frame; Physical là Bit.', 'Ở tầng Data Link, PDU được gọi là gì?'),
     entry('Packet switching', 'Trong chuyển mạch gói (Packet Switching), dữ liệu được truyền như thế nào?', 'Dữ liệu được chia thành các gói nhỏ và các gói được chuyển tiếp qua mạng.', ['Một đường truyền riêng được dành riêng trong toàn bộ thời gian liên lạc.', 'Dữ liệu luôn được gửi thành một tín hiệu liên tục không chia gói.', 'Chỉ sử dụng trong mạng điện thoại analog.'], 'Packet switching chia dữ liệu thành packet; các packet dùng chung tài nguyên mạng với lưu lượng khác.', 'Một tệp được chia thành nhiều packet nhỏ trước khi truyền qua Internet. Đây là phương pháp nào?'),
-    entry('Circuit switching', 'Đặc điểm của chuyển mạch kênh (Circuit Switching) là gì?', 'Thiết lập một kênh truyền riêng trước khi trao đổi dữ liệu.', ['Chia dữ liệu thành các gói độc lập và không cần thiết lập kênh.', 'Mỗi gói luôn đi qua một đường khác nhau.', 'Chỉ dùng địa chỉ IP để chọn máy nhận.'], 'Circuit switching dành riêng tài nguyên/kênh trong thời gian kết nối; đây là cách hoạt động truyền thống của mạng điện thoại chuyển mạch kênh.', 'Trước khi hai bên liên lạc, mạng thiết lập một kênh riêng và giữ kênh đó trong cuộc gọi. Đây là phương pháp nào?')
+    entry('Circuit switching', 'Đặc điểm của chuyển mạch kênh (Circuit Switching) là gì?', 'Thiết lập một kênh truyền riêng trước khi trao đổi dữ liệu.', ['Chia dữ liệu thành các gói độc lập và không cần thiết lập kênh.', 'Mỗi gói luôn đi qua một đường khác nhau.', 'Chỉ dùng địa chỉ IP để chọn máy nhận.'], 'Circuit switching dành riêng tài nguyên/kênh trong thời gian kết nối; đây là cách hoạt động truyền thống của mạng điện thoại chuyển mạch kênh.', 'Trước khi hai bên liên lạc, mạng thiết lập một kênh riêng và giữ kênh đó trong cuộc gọi. Đây là phương pháp nào?'),
+    entry("VLAN", "Hai phòng ban dùng chung hệ thống switch nhưng cần tách thành các mạng logic riêng. Nên cấu hình gì?", "Tạo VLAN riêng cho từng phòng ban.", ["Đổi sang IPv6", "Thay switch bằng hub", "Tắt DHCP"], "VLAN chia một LAN vật lý thành các LAN logic, giúp tách nhóm và giới hạn broadcast domain.", "Quản trị viên cần tách máy phòng Kế toán và Đào tạo dù chúng cắm cùng switch. Giải pháp nào phù hợp?"),
+    entry("LAN WAN", "Trụ sở ở TP.HCM kết nối với chi nhánh Hà Nội qua mạng của nhà cung cấp. Đây là loại mạng nào?", "WAN.", ["PAN", "LAN", "Mạng cá nhân"], "WAN kết nối các mạng ở khoảng cách địa lý lớn; LAN thường giới hạn trong nhà hoặc khuôn viên.", "Hai văn phòng ở hai thành phố cần trao đổi dữ liệu qua hạ tầng nhà mạng. Loại mạng nào được sử dụng?"),
+    entry("VPN", "Nhân viên ở nhà cần truy cập an toàn tài nguyên nội bộ công ty qua Internet. Công nghệ nào phù hợp?", "VPN.", ["Hub", "DNS", "FTP"], "VPN tạo kết nối riêng ảo qua mạng công cộng, thường mã hóa lưu lượng để truy cập từ xa an toàn hơn.", "Nhân viên đi công tác cần kết nối mạng nội bộ công ty qua Internet một cách an toàn. Nên dùng gì?"),
+    entry("Star link failure", "Trong mạng Star, dây nối một máy trạm đến switch bị đứt. Hậu quả thường là gì?", "Chỉ máy trạm đó mất kết nối; các nhánh khác vẫn hoạt động nếu switch tốt.", ["Toàn bộ mạng ngừng hoạt động", "Vòng mạng bị đứt", "Tất cả máy chuyển thành Bus"], "Trong Star, mỗi thiết bị có nhánh riêng về thiết bị trung tâm; hỏng một nhánh thường chỉ ảnh hưởng thiết bị đó.", "Một máy trong phòng thực hành bị rút cáp khỏi switch. Các máy còn lại có tiếp tục giao tiếp được không?"),
+    entry("Collision domain", "Trong Ethernet dùng switch, mỗi cổng switch thường tạo ra điều gì?", "Một collision domain riêng.", ["Tất cả cổng chung một collision domain", "Một DNS domain", "Một broadcast domain cho toàn Internet"], "Switch tách collision domain theo từng cổng. Kết nối full-duplex hiện đại không xảy ra collision Ethernet như half-duplex.", "Một switch nối nhiều máy ở các cổng riêng. Mỗi cổng thường thuộc miền va chạm nào?"),
+    entry("MAC address", "Trong cùng LAN Ethernet, địa chỉ nào xác định giao diện mạng đích trong frame?", "Địa chỉ MAC.", ["Địa chỉ email", "Tên miền DNS", "Số port TCP"], "MAC được dùng trong frame Ethernet để xác định giao diện mạng trên liên kết cục bộ; IP dùng ở tầng Network.", "Máy A gửi frame trực tiếp đến máy B trong cùng LAN. Địa chỉ nào xác định giao diện nhận frame?"),
+    entry("Hub repeater", "Thiết bị Layer 1 phát lại tín hiệu ra các cổng và không học địa chỉ MAC thường là gì?", "Hub.", ["Router", "Switch Layer 3", "DNS server"], "Hub hoạt động ở Physical, phát lại tín hiệu mà không lọc frame theo MAC. Repeater tái tạo tín hiệu để mở rộng khoảng cách.", "Thiết bị chỉ lặp tín hiệu và không đọc địa chỉ MAC là thiết bị nào?"),
+    entry("Switch forwarding", "Switch đã học MAC đích ở cổng 5. Khi nhận frame gửi đến MAC đó, switch thường làm gì?", "Chuyển frame ra cổng 5.", ["Gửi frame đến mọi cổng", "Đổi IP đích thành DNS", "Chuyển frame thành email"], "Switch dùng bảng MAC để chuyển frame đến cổng phù hợp; nếu chưa biết MAC đích, switch có thể flooding trong VLAN.", "Frame gửi đến MAC đã được switch học ở cổng 5. Frame được chuyển ra đâu?"),
+    entry("IEEE 802.3", "Ethernet có dây thường gắn với tiêu chuẩn IEEE nào?", "IEEE 802.3.", ["IEEE 802.11", "IEEE 802.15", "IEEE 802.16"], "IEEE 802.3 quy định Ethernet có dây; IEEE 802.11 là họ tiêu chuẩn Wi-Fi.", "Khi tra cứu tiêu chuẩn IEEE cho Ethernet có dây, mã nào cần nhớ?"),
+    entry("IEEE 802.11", "Laptop kết nối Wi-Fi. Họ tiêu chuẩn IEEE nào liên quan trực tiếp?", "IEEE 802.11.", ["IEEE 802.3", "IEEE 802.5", "IEEE 802.1Q"], "IEEE 802.11 là họ tiêu chuẩn mạng LAN không dây; IEEE 802.3 là Ethernet có dây.", "Một câu hỏi yêu cầu nhận diện chuẩn IEEE của Wi-Fi. Đáp án nào đúng?"),
   ],
 
   C2: [
@@ -72,7 +81,17 @@ const BANK = {
     entry('File distribution formula symbols', 'Trong các công thức phân phối file, F thường biểu diễn đại lượng nào?', 'Kích thước của tệp cần phân phối.', ['Số lượng router trong mạng.', 'Số cổng của giao thức TCP.', 'Độ dài địa chỉ IPv6.'], 'F là kích thước file; khi kết hợp với tốc độ truyền, ta có thể ước lượng thời gian phân phối.', 'Một bài toán cho biết tệp có dung lượng F và yêu cầu tính thời gian gửi. F đại diện cho điều gì?'),
     entry('Application layer examples', 'Ứng dụng nào sau đây thường sử dụng giao thức tầng Application?', 'Trình duyệt web truy cập website.', ['Tín hiệu điện chạy trên cáp đồng.', 'Bộ khuếch đại tín hiệu vật lý.', 'Đầu nối RJ45.'], 'Trình duyệt, email, truyền tệp và tra cứu tên miền là các ứng dụng sử dụng giao thức tầng Application.', 'Một ứng dụng cho phép người dùng đọc nội dung website. Đây là ví dụ về ứng dụng mạng ở tầng nào?'),
     entry('Client-server vs P2P file distribution', 'Khác biệt cơ bản giữa phân phối file Client-Server và P2P là gì?', 'Client-Server chủ yếu do server gửi file; P2P cho phép các peer chia sẻ file với nhau.', ['Client-Server không cần server; P2P chỉ có một server duy nhất.', 'Cả hai đều không dùng mạng máy tính.', 'P2P chỉ tải dữ liệu từ server và peer không thể gửi dữ liệu.'], 'Ở Client-Server, server cung cấp nội dung cho client. Ở P2P, các peer có thể vừa tải vừa tải lên cho peer khác.', 'Một tệp được truyền từ máy chủ đến người dùng trong mô hình thứ nhất, nhưng được chia sẻ giữa các máy người dùng trong mô hình thứ hai. Cách so sánh nào đúng?'),
-    entry('Email protocol roles', 'Phát biểu nào đúng khi phân biệt SMTP với POP3/IMAP?', 'SMTP dùng để gửi thư; POP3/IMAP dùng để nhận hoặc truy cập thư.', ['SMTP dùng để nhận thư; POP3 dùng để gửi thư.', 'Cả ba chỉ dùng để phân giải tên miền.', 'Cả ba chỉ dùng để cấp phát địa chỉ IP.'], 'Nhớ nhanh: SMTP = gửi; POP3/IMAP = lấy và quản lý thư từ máy chủ.', 'Khi ôn tập các giao thức email, cách ghép vai trò nào là chính xác?')
+    entry('Email protocol roles', 'Phát biểu nào đúng khi phân biệt SMTP với POP3/IMAP?', 'SMTP dùng để gửi thư; POP3/IMAP dùng để nhận hoặc truy cập thư.', ['SMTP dùng để nhận thư; POP3 dùng để gửi thư.', 'Cả ba chỉ dùng để phân giải tên miền.', 'Cả ba chỉ dùng để cấp phát địa chỉ IP.'], 'Nhớ nhanh: SMTP = gửi; POP3/IMAP = lấy và quản lý thư từ máy chủ.', 'Khi ôn tập các giao thức email, cách ghép vai trò nào là chính xác?'),
+    entry("URL hostname", "Trong URL `https://www.tdtu.edu.vn/news`, phần `www.tdtu.edu.vn` là gì?", "Tên máy chủ/tên miền (hostname).", ["Số port nguồn TCP", "Địa chỉ MAC", "Subnet mask"], "URL gồm scheme, hostname và đường dẫn. DNS có thể phân giải hostname thành địa chỉ IP.", "Người dùng nhập một URL vào trình duyệt. Phần chứa tên website được gọi là gì?"),
+    entry("DNS resolver", "Máy tính cần tìm IP của một tên miền. Thành phần nào thường nhận truy vấn phân giải từ máy?", "DNS resolver được cấu hình cho thiết bị hoặc mạng.", ["Máy chủ SMTP", "Switch Ethernet", "Máy chủ FTP"], "Host thường gửi truy vấn đến DNS resolver của tổ chức hoặc nhà cung cấp dịch vụ để tìm IP tương ứng.", "Khi cần tìm IP của tên miền, máy tính thường gửi câu hỏi đến thành phần nào?"),
+    entry("DNS TTL", "Một bản ghi DNS có TTL bằng 300 giây. TTL cho biết điều gì?", "Thời gian tối đa mà kết quả có thể được cache trước khi cần kiểm tra lại.", ["Kích thước tối đa của tên miền", "Số router phải đi qua", "Thời gian máy tính được cấp địa chỉ IP"], "TTL (Time To Live) của bản ghi DNS quy định khoảng thời gian resolver có thể lưu cache kết quả trước khi cần truy vấn lại.", "Quản trị viên đặt TTL của bản ghi DNS là 300 giây. Con số này thể hiện điều gì?"),
+    entry("DNS CNAME", "Một tên miền phụ cần làm bí danh trỏ đến hostname chính khác. Loại bản ghi DNS nào phù hợp?", "CNAME.", ["MX", "PTR", "AAAA"], "CNAME tạo bí danh (canonical name) trỏ đến một tên miền/hostname khác; nó không trực tiếp lưu địa chỉ IP.", "Quản trị viên muốn `www.example.com` là bí danh của `web01.example.com`. Nên dùng record nào?"),
+    entry("HTTP GET", "Trình duyệt cần yêu cầu web server gửi nội dung của một trang. Phương thức HTTP nào thường được dùng?", "GET.", ["POST", "ACK", "DHCP"], "GET thường được dùng để yêu cầu/tải tài nguyên từ web server; POST thường gửi dữ liệu lên server để xử lý.", "Bạn bấm vào một liên kết để tải nội dung trang web. Trình duyệt thường gửi HTTP method nào?"),
+    entry("FTP active passive", "Trong FTP passive mode, client thường chủ động kết nối đến cổng dữ liệu do server thông báo. Nhận định nào đúng?", "Client khởi tạo kết nối dữ liệu đến server.", ["Server luôn khởi tạo kết nối dữ liệu đến client", "FTP không tạo kết nối dữ liệu", "Dữ liệu luôn truyền qua UDP port 53"], "Ở passive mode, server thông báo một port dữ liệu và client chủ động kết nối đến port đó; cách này thường thuận lợi hơn khi client nằm sau NAT/firewall.", "Client FTP nằm sau router NAT và dùng passive mode. Bên nào thường khởi tạo kết nối dữ liệu?"),
+    entry("SSH", "Quản trị viên cần đăng nhập dòng lệnh từ xa vào server qua mạng công cộng một cách an toàn. Nên dùng gì?", "SSH.", ["HTTP", "TFTP", "POP3"], "SSH mã hóa phiên đăng nhập từ xa; Telnet truyền dữ liệu dạng rõ và kém an toàn.", "Bạn cần truy cập terminal của server từ xa và muốn mật khẩu được mã hóa. Chọn giao thức nào?"),
+    entry("Telnet security", "Vì sao không nên dùng Telnet để đăng nhập máy chủ qua mạng công cộng?", "Telnet không mã hóa dữ liệu đăng nhập theo mặc định.", ["Telnet chỉ chạy với IPv6", "Telnet không thuộc Application", "Telnet luôn cần cáp quang"], "Telnet truyền dữ liệu dạng rõ, có thể bị nghe lén; SSH an toàn hơn cho truy cập dòng lệnh từ xa.", "Kẻ tấn công bắt gói tin có thể đọc thông tin đăng nhập Telnet. Nguyên nhân là gì?"),
+    entry("FTP control port", "Kết nối điều khiển FTP truyền thống thường đến port nào của server?", "TCP port 21.", ["UDP port 53", "TCP port 80", "UDP port 68"], "FTP truyền thống dùng TCP port 21 cho kênh điều khiển; kênh dữ liệu tùy chế độ active/passive.", "Client FTP cần mở kênh điều khiển với server. Port đích mặc định là bao nhiêu?"),
+    entry("IMAP multi device", "Người dùng muốn đọc cùng hộp thư trên laptop và điện thoại, trạng thái thư được đồng bộ. Giao thức nào phù hợp?", "IMAP.", ["SMTP", "TFTP", "ARP"], "IMAP giữ thư trên server và đồng bộ thư mục/trạng thái giữa nhiều thiết bị; POP3 thường tải thư về client đơn giản hơn.", "Một sinh viên xem cùng hộp thư trên nhiều thiết bị và muốn đồng bộ. Nên chọn POP3 hay IMAP?"),
   ],
 
   C3: [
@@ -105,7 +124,17 @@ const BANK = {
     entry('HTTP and HTTPS ports', 'Cặp port mặc định của HTTP và HTTPS lần lượt là gì?', '80 và 443.', ['21 và 25.', '53 và 67.', '110 và 143.'], 'HTTP thường dùng TCP port 80; HTTPS thường dùng TCP port 443.', 'Bạn cần ghép cổng mặc định cho website HTTP và HTTPS. Cặp nào đúng?'),
     entry('FTP and DNS ports', 'Các port thường gặp của FTP và DNS là gì?', 'FTP dùng TCP 21 cho điều khiển, TCP 20 cho dữ liệu ở chế độ active; DNS dùng port 53.', ['FTP dùng TCP 80/443; DNS dùng port 25.', 'FTP dùng TCP 25 cho điều khiển; DNS dùng port 110.', 'FTP dùng UDP 67/68; DNS dùng port 21.'], 'FTP thường dùng TCP 21 cho kênh điều khiển và TCP 20 cho kênh dữ liệu ở chế độ active. Ở chế độ passive, cổng dữ liệu do máy chủ thông báo và không cố định là 20. DNS dùng port 53, thường qua UDP và đôi khi qua TCP.', 'Khi học port FTP theo cách trình bày cơ bản, cổng 21 và 20 lần lượt dùng cho mục đích nào?'),
     entry('SMTP, POP3, IMAP and DHCP ports', 'Phương án nào ghi đúng các port mặc định thường gặp của SMTP, POP3, IMAP và DHCPv4?', 'SMTP 25; POP3 110; IMAP 143; DHCPv4 server/client UDP 67/68.', ['SMTP 80; POP3 443; IMAP 53; DHCPv4 21/25.', 'SMTP 110; POP3 25; IMAP 67; DHCPv4 68/143.', 'SMTP 53; POP3 80; IMAP 443; DHCPv4 20/21.'], 'SMTP dùng TCP 25 trong trao đổi giữa các mail server; gửi thư từ ứng dụng người dùng thường dùng thêm cổng 587 hoặc 465. POP3 thường dùng TCP 110, IMAP TCP 143. Với DHCPv4, server dùng UDP 67 và client dùng UDP 68.', 'Hãy ghép port cho giao thức gửi email, nhận email và cấp phát IP tự động.'),
-    entry('Packet vs circuit switching', 'Khác biệt cơ bản giữa packet switching và circuit switching là gì?', 'Packet switching chia dữ liệu thành gói; circuit switching thiết lập kênh riêng.', ['Cả hai đều luôn dành riêng một kênh cho từng gói.', 'Packet switching chỉ dùng cho email; circuit switching chỉ dùng cho DNS.', 'Hai phương pháp không khác nhau.'], 'Chuyển mạch gói chia dữ liệu thành packet và dùng chung tài nguyên; chuyển mạch kênh thiết lập kênh riêng trong thời gian kết nối.', 'Khi so sánh hai cách truyền dữ liệu qua mạng, phương án mô tả đúng hai phương thức là gì?')
+    entry('Packet vs circuit switching', 'Khác biệt cơ bản giữa packet switching và circuit switching là gì?', 'Packet switching chia dữ liệu thành gói; circuit switching thiết lập kênh riêng.', ['Cả hai đều luôn dành riêng một kênh cho từng gói.', 'Packet switching chỉ dùng cho email; circuit switching chỉ dùng cho DNS.', 'Hai phương pháp không khác nhau.'], 'Chuyển mạch gói chia dữ liệu thành packet và dùng chung tài nguyên; chuyển mạch kênh thiết lập kênh riêng trong thời gian kết nối.', 'Khi so sánh hai cách truyền dữ liệu qua mạng, phương án mô tả đúng hai phương thức là gì?'),
+    entry("SYN response", "Client gửi TCP SYN để bắt đầu kết nối. Nếu cổng mở, server thường phản hồi bằng gì?", "SYN-ACK.", ["FIN", "RST trong mọi trường hợp", "DHCP-ACK"], "Bắt tay TCP gồm SYN từ client, SYN-ACK từ server và ACK từ client.", "Sau khi nhận SYN hợp lệ, server thường trả về tổ hợp cờ TCP nào?"),
+    entry("Handshake final ACK", "Sau khi nhận SYN-ACK, client gửi gói nào để hoàn tất bắt tay TCP?", "ACK.", ["SYN", "FIN", "PSH-URG"], "Bước thứ ba của TCP three-way handshake là ACK từ client.", "Trong chuỗi SYN → SYN-ACK → ?, gói cuối cùng là gì?"),
+    entry("Transport port demux", "Máy tính chạy trình duyệt và email cùng lúc. Thông tin nào giúp chuyển dữ liệu đến đúng tiến trình?", "Số port.", ["Địa chỉ MAC của switch", "Tên hãng card mạng", "Địa chỉ broadcast"], "Port phân biệt các tiến trình/dịch vụ trên một host; IP xác định host.", "Dữ liệu đến một máy có nhiều ứng dụng. Trường nào giúp phân phối đến đúng ứng dụng?"),
+    entry("TCP receive window", "Máy nhận TCP xử lý dữ liệu chậm và muốn báo cho bên gửi lượng dữ liệu có thể nhận thêm. Cơ chế nào được dùng?", "Cửa sổ nhận (Receive Window).", ["DNS cache", "TTL IPv4", "Địa chỉ MAC"], "TCP flow control dùng receive window để bên gửi không vượt quá khả năng tiếp nhận mà bên nhận quảng bá.", "Bộ đệm bên nhận gần đầy. TCP dùng thông tin nào để điều tiết lượng dữ liệu gửi?"),
+    entry("TCP retransmission", "Một segment TCP bị mất và không được xác nhận. TCP có thể làm gì?", "Truyền lại dữ liệu khi phát hiện mất gói.", ["Đổi MAC nguồn", "Gửi truy vấn DNS", "Chuyển sang DHCP"], "TCP dùng ACK, timeout và cơ chế phát hiện mất dữ liệu để truyền lại segment khi cần.", "Bên gửi không nhận được xác nhận dữ liệu. TCP có thể thực hiện hành động nào?"),
+    entry("UDP voice call", "Ứng dụng gọi thoại ưu tiên độ trễ thấp và có thể chấp nhận mất một ít gói. Giao thức nào thường phù hợp?", "UDP.", ["TCP trong mọi trường hợp", "ARP", "DNS"], "UDP không thiết lập kết nối và có ít cơ chế hơn TCP, thường phù hợp ứng dụng thời gian thực cần độ trễ thấp.", "Cuộc gọi video ưu tiên giảm trễ hơn là truyền lại mọi gói bị mất. Chọn giao thức nào?"),
+    entry("TCP file transfer", "Người dùng tải tệp và cần dữ liệu đầy đủ, đúng thứ tự. Giao thức Transport nào thường phù hợp?", "TCP.", ["UDP không bổ sung cơ chế nào", "ARP", "DNS"], "TCP có đánh số thứ tự, xác nhận và truyền lại để hỗ trợ truyền dữ liệu tin cậy.", "Khi tải tệp cần bảo đảm dữ liệu đầy đủ, đúng thứ tự, giao thức nào thường được dùng?"),
+    entry("Port range", "Trường port TCP dài 16 bit. Giá trị port biểu diễn được trong khoảng nào?", "0 đến 65535.", ["0 đến 255", "1 đến 1024", "0 đến 6553"], "16 bit biểu diễn 2^16 = 65536 giá trị, đánh số từ 0 đến 65535.", "Một trường port dài 16 bit có thể có giá trị lớn nhất là bao nhiêu?"),
+    entry("UDP fields", "UDP header cơ bản có bao nhiêu trường và mỗi trường dài bao nhiêu bit?", "4 trường, mỗi trường 16 bit.", ["2 trường, mỗi trường 32 bit", "5 trường, mỗi trường 8 bit", "4 trường, mỗi trường 32 bit"], "UDP gồm Source Port, Destination Port, Length và Checksum; mỗi trường 16 bit nên header dài 8 byte.", "Khi xem sơ đồ UDP header, có bao nhiêu trường 16 bit?"),
+    entry("Circuit switching scenario", "Một cuộc gọi được cấp kênh/tài nguyên riêng trong suốt thời gian liên lạc. Đây là kiểu chuyển mạch nào?", "Circuit switching.", ["Packet switching", "DNS caching", "NAT overload"], "Circuit switching thiết lập tài nguyên dành riêng trong thời gian kết nối; packet switching chia dữ liệu thành gói và chia sẻ tài nguyên.", "Mạng thiết lập một kênh riêng trước cuộc gọi và giữ kênh đến khi kết thúc. Phương pháp nào đang dùng?"),
   ],
 
   C4: [
@@ -141,7 +170,17 @@ const BANK = {
     entry('IPS', 'IPS trong an ninh mạng là viết tắt của cụm từ nào?', 'Intrusion Prevention System – hệ thống ngăn chặn xâm nhập.', ['Internet Protocol Service – dịch vụ giao thức Internet.', 'Internal Port Setup – thiết lập cổng nội bộ.', 'Internet Packet Storage – lưu trữ gói tin Internet.'], 'IPS giám sát để phát hiện và chủ động ngăn chặn hoạt động xâm nhập đáng ngờ. Khác với IDS chủ yếu phát hiện và cảnh báo, IPS được thiết kế để có thể chủ động chặn lưu lượng hoặc hành vi bị xác định là nguy hiểm.', 'Một hệ thống an ninh mạng có khả năng phát hiện và tự động chặn hành vi xâm nhập. Tên viết tắt nào phù hợp?'),
     entry('Firewall', 'Firewall (tường lửa) có chức năng chính nào?', 'Kiểm soát, cho phép hoặc chặn lưu lượng mạng vào/ra dựa trên các quy tắc bảo mật.', ['Phân giải tên miền thành địa chỉ IP.', 'Tự động cấp địa chỉ IP cho thiết bị.', 'Chia một tệp lớn thành các packet.'], 'Firewall có thể triển khai bằng phần cứng, phần mềm hoặc kết hợp. Nó lọc lưu lượng theo quy tắc, có thể ghi log và cảnh báo hoạt động đáng ngờ. Firewall giúp giảm rủi ro nhưng không bảo đảm chặn được mọi malware hay mọi cuộc tấn công DoS.', 'Thiết bị hoặc phần mềm nào dùng các quy tắc bảo mật để cho phép hay chặn lưu lượng mạng?'),
     entry('IDS', 'IDS là viết tắt của cụm từ nào và có nhiệm vụ chính gì?', 'Intrusion Detection System – giám sát để phát hiện và cảnh báo dấu hiệu xâm nhập.', ['Intrusion Prevention System – tự động chặn mọi lưu lượng.', 'Internet Domain Service – phân giải tên miền.', 'Internal Data Switch – chuyển frame trong LAN.'], 'IDS (Intrusion Detection System) phân tích hoạt động mạng hoặc hệ thống để phát hiện dấu hiệu bất thường/xâm nhập và gửi cảnh báo. IDS thường tập trung phát hiện, không mặc định tự chặn như IPS.', 'Hệ thống nào theo dõi hoạt động mạng để phát hiện và cảnh báo hành vi xâm nhập đáng ngờ?'),
-    entry('SPI', 'SPI (Stateful Packet Inspection) trong firewall hoạt động như thế nào?', 'Theo dõi trạng thái kết nối và đánh giá packet dựa trên trạng thái của phiên giao tiếp.', ['Chỉ kiểm tra tên miền mà không xem kết nối.', 'Tự động đổi địa chỉ IPv4 thành IPv6.', 'Mã hóa toàn bộ dữ liệu bằng AES.'], 'SPI là kiểm tra gói tin có trạng thái. Firewall theo dõi các kết nối đang diễn ra và đánh giá packet có phù hợp với trạng thái/phiên đã thiết lập hay không, thay vì chỉ xem từng packet riêng lẻ.', 'Cơ chế nào giúp firewall theo dõi trạng thái phiên kết nối để quyết định packet có phù hợp với kết nối đang tồn tại hay không?')
+    entry('SPI', 'SPI (Stateful Packet Inspection) trong firewall hoạt động như thế nào?', 'Theo dõi trạng thái kết nối và đánh giá packet dựa trên trạng thái của phiên giao tiếp.', ['Chỉ kiểm tra tên miền mà không xem kết nối.', 'Tự động đổi địa chỉ IPv4 thành IPv6.', 'Mã hóa toàn bộ dữ liệu bằng AES.'], 'SPI là kiểm tra gói tin có trạng thái. Firewall theo dõi các kết nối đang diễn ra và đánh giá packet có phù hợp với trạng thái/phiên đã thiết lập hay không, thay vì chỉ xem từng packet riêng lẻ.', 'Cơ chế nào giúp firewall theo dõi trạng thái phiên kết nối để quyết định packet có phù hợp với kết nối đang tồn tại hay không?'),
+    entry("Default gateway", "Máy tính gửi packet đến server nằm ngoài subnet. Nó thường chuyển frame đến thiết bị nào trước?", "Default gateway (thường là router).", ["Máy in mạng", "DNS root server", "Hub"], "Khi đích ngoài subnet, host gửi frame đến MAC của default gateway để router chuyển tiếp packet.", "Máy tính trong LAN truy cập server ở mạng khác. Thiết bị nào làm default gateway?"),
+    entry("IPv4 TTL", "Packet IPv4 đi qua router. Trường nào giảm để giới hạn thời gian tồn tại và tránh lặp vô hạn?", "TTL.", ["Source Port", "Sequence Number", "DNS MX"], "TTL giảm ít nhất một đơn vị tại mỗi router; khi về 0, packet bị loại bỏ.", "Router chuyển tiếp IPv4 packet. Trường nào được giảm ở mỗi chặng?"),
+    entry("IP MAC distinction", "Packet đi qua nhiều router. Địa chỉ nào giúp router xác định mạng/host đích?", "Địa chỉ IP đích.", ["Địa chỉ MAC đích cố định suốt Internet", "Tên người dùng", "Loại cáp"], "IP nguồn/đích phục vụ định tuyến qua nhiều mạng; MAC chỉ có ý nghĩa trên liên kết cục bộ và thay đổi theo từng chặng.", "Khi dữ liệu đi qua nhiều mạng, địa chỉ nào được router dùng để chọn đường?"),
+    entry("ARP resolution", "Host biết IPv4 của máy khác trong cùng LAN nhưng chưa biết MAC. Giao thức nào giúp tìm MAC?", "ARP.", ["DNS", "SMTP", "DHCP"], "ARP phân giải IPv4 thành MAC trong mạng LAN IPv4, thường qua ARP Request và Reply.", "Máy gửi biết IP đích cùng LAN nhưng chưa có MAC. Nó dùng giao thức nào?"),
+    entry("Routing table", "Router cần chọn next hop hoặc giao diện ra cho packet. Nó dựa vào thông tin nào?", "Bảng định tuyến (routing table).", ["Danh sách email", "Bản ghi DNS MX", "Tên file client"], "Router tra bảng định tuyến dựa trên địa chỉ IP đích để chọn tuyến phù hợp.", "Một router quyết định packet đi ra giao diện nào. Nó tra cứu gì?"),
+    entry("Decimal 10 to binary", "Số thập phân 10 được biểu diễn ở dạng nhị phân 8 bit nào dưới đây?", "00001010.", ["00001000", "00001001", "00001011"], "10 = 8 + 2, tương ứng các bit 1 ở vị trí 8 và 2. Viết đủ 8 bit là 00001010.", "Khi đổi số thập phân 10 sang nhị phân 8 bit để đọc một octet, kết quả nào đúng?"),
+    entry("Decimal 10 to hexadecimal", "Số thập phân 10 được viết như thế nào trong hệ thập lục phân (hexadecimal)?", "A.", ["9", "B", "C"], "Trong hệ thập lục phân, các giá trị 10 đến 15 lần lượt được biểu diễn bằng A, B, C, D, E, F. Vì vậy 10₁₀ = A₁₆.", "Khi đổi số thập phân 10 sang hệ cơ số 16, ký hiệu nào được sử dụng?"),
+    entry("IPv4 APIPA", "Một máy Windows tự nhận địa chỉ IPv4 dạng 169.254.x.x khi không liên lạc được DHCP. Dải này thường biểu thị điều gì?", "Địa chỉ link-local/APIPA tự gán khi không nhận được cấu hình DHCP.", ["Địa chỉ public được nhà mạng cấp", "Địa chỉ multicast", "Địa chỉ loopback"], "IPv4 link-local 169.254.0.0/16 thường được hệ điều hành tự gán khi không nhận được địa chỉ từ DHCP; địa chỉ này thường không được định tuyến qua router.", "Máy tính không liên lạc được DHCP và tự nhận IP 169.254.20.5. Điều gì có thể đã xảy ra?"),
+    entry("IPv6 no broadcast", "Một ứng dụng gửi dữ liệu đến tất cả thiết bị trong một subnet IPv6 theo kiểu broadcast IPv4. Nhận định nào đúng?", "IPv6 không sử dụng broadcast; có thể dùng multicast cho nhóm thiết bị.", ["IPv6 dùng địa chỉ broadcast 255.255.255.255", "IPv6 không hỗ trợ multicast", "IPv6 chỉ gửi được unicast"], "IPv6 không có broadcast. Các chức năng gửi đến nhóm thiết bị được thực hiện bằng multicast.", "Khi chuyển từ IPv4 sang IPv6, quản trị viên cần lưu ý IPv6 thay broadcast bằng cơ chế nào?"),
+    entry("Binary 11101000 to decimal", "Giá trị thập phân của số nhị phân 11101000 là bao nhiêu?", "232.", ["128", "194", "224"], "11101000₂ = 128 + 64 + 32 + 8 = 232₁₀.", "Một octet địa chỉ IP có dạng nhị phân 11101000. Giá trị thập phân tương ứng là bao nhiêu?"),
   ]
 };
 
@@ -163,39 +202,38 @@ const shuffleWithSeed = (items, seed) => {
   return arr;
 };
 
-const promptVariants = (item, chapter) => [
-  item.q,
-  `Hãy chọn phương án trả lời chính xác cho câu hỏi: ${item.q}`,
-  `Trong ${chapterNames[chapter]}, phát biểu nào sau đây đúng về ${item.topic}?`,
-  `Phương án nào mô tả chính xác ${item.topic} trong ${chapterNames[chapter]}?`,
-  `Khi ôn tập ${item.topic} thuộc ${chapterNames[chapter]}, nội dung nào sau đây cần ghi nhớ?`
-];
+const promptVariants = (item) => {
+  const scenario = item.scenario || item.q;
+  return [
+    item.q,
+    scenario,
+    `Xét tình huống sau: ${scenario}`,
+    `Bạn đang xử lý tình huống mạng sau: ${scenario}`,
+    `Trong trường hợp thực tế này, phương án nào đúng? ${scenario}`
+  ];
+};
 
 const questions = [];
+const answerPositionCounts = Array.from({ length: 8 }, () => [0, 0, 0, 0]);
 for (const [chapter, items] of Object.entries(BANK)) {
-  if (items.length !== 30) throw new Error(`${chapter} phải có đúng 30 chủ đề, hiện có ${items.length}`);
+  if (items.length !== 40) throw new Error(`${chapter} phải có đúng 40 chủ đề, hiện có ${items.length}`);
   items.forEach((item, conceptIndex) => {
-    const omittedSet = conceptIndex % 6;
-    const setIds = [0, 1, 2, 3, 4, 5].filter((id) => id !== omittedSet);
-    setIds.forEach((setId, variantIndex) => {
+    // Each concept appears in five of eight sets; each set receives 25 concepts per chapter.
+    const placements = Array.from({ length: 5 }, (_, variantIndex) => ({ setId: (conceptIndex + variantIndex) % 8, variantIndex }));
+    placements.forEach(({ setId, variantIndex }) => {
       const seed = conceptIndex * 31 + setId * 101 + chapter.charCodeAt(1);
       const wrongOptions = shuffleWithSeed(item.wrong, seed);
-      // Balance correct answers across A/B/C/D: each fixed 100-question set gets 25 of each.
-      const correctIndex = (conceptIndex + setId + Number(chapter.slice(1))) % 4;
+      const counts = answerPositionCounts[setId];
+      const correctIndex = counts.indexOf(Math.min(...counts));
+      counts[correctIndex]++;
       const options = [...wrongOptions];
       options.splice(correctIndex, 0, item.a);
       questions.push({
         id: `${chapter}-${String(conceptIndex + 1).padStart(2, '0')}-S${setId + 1}`,
-        chapter,
-        chapterName: chapterNames[chapter],
-        topic: item.topic,
-        conceptId: `${chapter}-${conceptIndex + 1}`,
-        setId: setId + 1,
-        difficulty: item.level,
-        question: promptVariants(item, chapter)[variantIndex],
-        options,
-        answerIndex: options.indexOf(item.a),
-        explanation: item.explain
+        chapter, chapterName: chapterNames[chapter], topic: item.topic,
+        conceptId: `${chapter}-${conceptIndex + 1}`, setId: setId + 1,
+        difficulty: item.level, question: promptVariants(item)[variantIndex],
+        options, answerIndex: options.indexOf(item.a), explanation: item.explain
       });
     });
   });

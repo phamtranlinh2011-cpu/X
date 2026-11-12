@@ -79,7 +79,7 @@ function renderHome() {
       <div class="hero-copy">
         <div class="kicker">Computer networks · Midterm prep</div>
         <h1>Nắm chắc <span class="gradient-word">mạng máy tính.</span></h1>
-        <p class="hero-lede">Luyện tập kiến thức nhập môn, nắm chắc chức năng từng tầng mạng và tự tin bước vào bài thi giữa kỳ. 600 câu hỏi ở mức cơ bản, kèm giải thích và bám theo đề cương ôn tập của bạn.</p>
+        <p class="hero-lede">Luyện tập kiến thức nhập môn, nắm chắc chức năng từng tầng mạng và tự tin bước vào bài thi giữa kỳ. 800 câu hỏi theo tình huống và kiến thức trọng tâm, kèm giải thích và bám theo đề cương ôn tập của bạn.</p>
         <div class="hero-tags"><span>4 chương trọng tâm</span><span>100 câu / lượt</span><span>Giải thích ngay</span></div>
       </div>
       <div class="hero-visual" aria-hidden="true">
@@ -92,7 +92,7 @@ function renderHome() {
           <div class="node node-small node-c">${icon('globe', 20)}</div>
           <div class="node node-small node-d">${icon('layers2', 20)}</div>
         </div>
-        <div class="float-chip">600 QUESTIONS<small>Ôn tập theo chương</small></div>
+        <div class="float-chip">800 QUESTIONS<small>Ôn tập theo chương</small></div>
       </div>
     </section>
 
@@ -103,10 +103,10 @@ function renderHome() {
           <div class="panel-title"><span class="panel-icon">${icon('layers', 17)}</span> Chọn chế độ làm bài</div>
           <div class="mode-grid">
             <button class="mode-card ${settings.mode === 'fixed' ? 'active' : ''}" data-mode="fixed" type="button">
-              <span class="mode-symbol">📚</span><strong>Đề mặc định</strong><small>Chọn ngẫu nhiên 1 trong 6 đề cố định. Mỗi đề cân bằng 4 chương.</small><span class="mode-meta">06 đề × 100 câu</span>
+              <span class="mode-symbol">📚</span><strong>Đề mặc định</strong><small>Chọn ngẫu nhiên 1 trong 8 đề cố định. Mỗi đề cân bằng 4 chương.</small><span class="mode-meta">08 đề × 100 câu</span>
             </button>
             <button class="mode-card ${settings.mode === 'random' ? 'active' : ''}" data-mode="random" type="button">
-              <span class="mode-symbol">${icon('shuffle', 20)}</span><strong>Đề ngẫu nhiên</strong><small>Bốc câu hỏi mới từ kho 600 câu, không trùng khái niệm trong cùng lượt.</small><span class="mode-meta">100 / 600 câu</span>
+              <span class="mode-symbol">${icon('shuffle', 20)}</span><strong>Đề ngẫu nhiên</strong><small>Bốc câu hỏi mới từ kho 800 câu, không trùng khái niệm trong cùng lượt.</small><span class="mode-meta">100 / 800 câu</span>
             </button>
           </div>
           <div class="setup-divider"></div>
@@ -124,8 +124,8 @@ function renderHome() {
         <aside class="panel info-panel">
           <div><h3>Thông báo từ máy chủ:</h3><p>Các con dân của ta hãy lấy mà làm =))</p></div>
           <div class="info-stat-grid">
-            <div class="info-stat"><b>600</b><span>Câu hỏi</span></div>
-            <div class="info-stat"><b>06</b><span>Đề cân bằng</span></div>
+            <div class="info-stat"><b>800</b><span>Câu hỏi</span></div>
+            <div class="info-stat"><b>08</b><span>Đề cân bằng</span></div>
             <div class="info-stat"><b>04</b><span>Chương học</span></div>
             <div class="info-stat"><b>60'</b><span>Thời gian thi</span></div>
           </div>
@@ -150,7 +150,7 @@ function renderHome() {
 
 function makeQuestionSet() {
   if (settings.mode === 'fixed') {
-    const setId = 1 + Math.floor(Math.random() * 6);
+    const setId = 1 + Math.floor(Math.random() * 8);
     const selected = questions.filter((question) => question.setId === setId);
     return { list: shuffle(selected), label: `Đề mặc định số ${setId}`, setId };
   }
