@@ -4,7 +4,7 @@ Website trắc nghiệm tiếng Việt dành cho sinh viên năm nhất. Dự á
 
 ## Phiên bản ngân hàng câu hỏi đã chỉnh sửa
 
-**NETLAB v1.2.0** — bản kiểm tra và cân bằng lại toàn bộ dự án.
+**NETLAB v1.2.1** — bản cập nhật giao diện trang chủ; ngân hàng câu hỏi và logic làm bài giữ nguyên.
 
 Ngân hàng đã được biên tập lại theo đúng các mục trong đề cương ôn tập người học cung cấp, ưu tiên mức **nhận biết – hiểu – tính toán cơ bản**. Các nhóm kiến thức nâng cao hoặc không được nêu rõ trong đề cương đã được bỏ bớt, ví dụ: CDN, cookie/MIME, DNS recursive/iterative, TCP congestion control và longest-prefix matching.
 
@@ -76,6 +76,7 @@ Validator kiểm tra 600 câu, số câu/chương, số câu/đề, câu không 
 
 ## Những điểm đã rà và sửa trong lượt này
 
+- Cập nhật trang chủ: bỏ khối “Bản đồ kiến thức” gồm thông tin 4 chương và ghi chú nguồn; đổi thẻ thông tin thành “Thông báo từ máy chủ:” với nội dung “Các con dân của ta hãy lấy mà làm =))”.
 - Kiểm tra toàn dự án v1.2.0: sửa thống kê `Câu sai` để chỉ tính câu đã trả lời sai; câu bỏ trống được thống kê riêng và không bị đếm trùng.
 - Cân bằng vị trí đáp án đúng A/B/C/D: mỗi đề mặc định 100 câu có đúng 25 đáp án ở từng vị trí; validator kiểm tra tự động.
 - Đã chạy kiểm thử giao diện Chromium cho trang chủ, làm bài, chọn đáp án, giải thích, chuyển câu, xác nhận/hủy nộp, kết quả, random đủ 100 câu, hết giờ tự nộp và responsive mobile.

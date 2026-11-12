@@ -122,7 +122,7 @@ function renderHome() {
           <p class="fine-print">Mỗi câu hiện lần lượt · Chọn đáp án để xem giải thích · Có thể nộp bài sớm</p>
         </div>
         <aside class="panel info-panel">
-          <div><h3>Ôn tập có hệ thống</h3><p>Ngân hàng được biên tập ở mức cơ bản, chia đều theo 4 chương và ưu tiên đúng các nội dung trong đề cương ôn tập.</p></div>
+          <div><h3>Thông báo từ máy chủ:</h3><p>Các con dân của ta hãy lấy mà làm =))</p></div>
           <div class="info-stat-grid">
             <div class="info-stat"><b>600</b><span>Câu hỏi</span></div>
             <div class="info-stat"><b>06</b><span>Đề cân bằng</span></div>
@@ -134,17 +134,6 @@ function renderHome() {
       </div>
     </section>
 
-    <section class="coverage-section" aria-labelledby="coverage-title">
-      <div class="section-heading"><div><h2 id="coverage-title">Bản đồ kiến thức</h2><p>600 câu được phân bổ đều, 150 câu cho mỗi chương.</p></div><span class="source-pill">${icon('book', 13)} 25 câu / chương / đề</span></div>
-      <div class="chapter-grid">
-        <article class="chapter-card" style="--accent:#71e2d1;--glow:rgba(102,227,208,.15)"><div class="chapter-number">CHAPTER 01</div><h3>Mạng máy tính và Internet</h3><p>Kiến trúc, OSI, PDU, topology và bảo mật Wi-Fi (WEP/WPA/WPA2).</p><div class="chapter-bottom"><span>Ngân hàng câu hỏi</span><strong>150 câu</strong></div></article>
-        <article class="chapter-card" style="--accent:#b5a8ff;--glow:rgba(156,140,255,.15)"><div class="chapter-number">CHAPTER 02</div><h3>Tầng Application</h3><p>HTTP, DNS, email, FTP, phân phối file.</p><div class="chapter-bottom"><span>Ngân hàng câu hỏi</span><strong>150 câu</strong></div></article>
-        <article class="chapter-card" style="--accent:#ffc17f;--glow:rgba(255,189,120,.15)"><div class="chapter-number">CHAPTER 03</div><h3>Tầng Transport</h3><p>TCP, UDP, port, segment, switching.</p><div class="chapter-bottom"><span>Ngân hàng câu hỏi</span><strong>150 câu</strong></div></article>
-        <article class="chapter-card" style="--accent:#ff91a2;--glow:rgba(255,127,145,.15)"><div class="chapter-number">CHAPTER 04</div><h3>Tầng Network</h3><p>Router, IPv4/IPv6, subnetting, VLSM và bảo mật mạng (Firewall, IDS/IPS, NAT, SPI).</p><div class="chapter-bottom"><span>Ngân hàng câu hỏi</span><strong>150 câu</strong></div></article>
-      </div>
-    </section>
-
-    <div class="disclaimer">${icon('alert', 15)}<span><strong>Ghi chú nguồn:</strong> Đây là ngân hàng câu hỏi tự biên soạn theo đề cương bạn cung cấp và kiến thức mạng máy tính nhập môn; không phải đề thi chính thức, cũng không xác nhận là câu hỏi từng xuất hiện tại TDTU.</span></div>
     <footer class="footer"><span>NETLAB · NETWORKING MIDTERM PRACTICE</span><span>Được thiết kế để tự học · Không cần tài khoản</span></footer>
   `;
 
