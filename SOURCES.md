@@ -1,6 +1,6 @@
 # Nguồn tham khảo kiến thức
 
-Ngân hàng câu hỏi trong dự án được tự biên soạn theo đề cương ôn tập người học cung cấp. Danh sách dưới đây là tài liệu kỹ thuật gốc để đối chiếu các kiến thức mạng cơ bản; **không phải đề thi TDTU** và không xác nhận câu hỏi từng xuất hiện trong bài thi của trường.
+Ngân hàng câu hỏi trong dự án được tự biên soạn dựa trên: (1) đề cương ôn giữa kỳ người học gửi; (2) bốn ảnh ghi chú viết tay được cung cấp trong file `x.rar` — có các mục OSI/TCP-IP/IP Stack, mô hình mạng, chuyển mạch, port, PDU, IPv4 private và subnetting, NAT/ARP/RIP/IPS; (3) phần ghi chú bổ sung do người học gửi về WEP/WPA/WPA2-AES, Firewall, IDS, NAT và SPI; và (4) các tài liệu kỹ thuật liệt kê bên dưới. Những ghi chú này là tài liệu ôn tập do người học cung cấp, không phải đề thi chính thức. **Không xác nhận các câu hỏi trong ngân hàng từng xuất hiện ở kỳ thi TDTU.**
 
 ## RFC / tiêu chuẩn giao thức
 
@@ -21,6 +21,19 @@ Ngân hàng câu hỏi trong dự án được tự biên soạn theo đề cư�
 - [RFC 1939 — Post Office Protocol, Version 3 (POP3)](https://www.rfc-editor.org/rfc/rfc1939)
 - [RFC 9051 — Internet Message Access Protocol (IMAP) Version 4rev2](https://www.rfc-editor.org/rfc/rfc9051)
 - [RFC 9110 — HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110)
+
+## Tài liệu học tập do người học cung cấp
+
+- Bốn ảnh ghi chú viết tay trong `x.rar`: dùng để đối chiếu cách gọi tầng OSI, mô hình TCP/IP 4 tầng và IP Stack 5 tầng, PDU, port FTP/SMTP/POP3/IMAP/DNS/HTTP(S), chuyển mạch gói/kênh, các dải Private IPv4, cách tính block size/subnet/VLSM và các thuật ngữ NAT/ARP/RIP/IPS; phần ghi chú bổ sung do người học gửi về WEP/WPA/WPA2-AES, Firewall, IDS và SPI.
+
+## Bảo mật mạng / Wi-Fi tham khảo
+
+- [NIST SP 800-153 — Guidelines for Securing Wireless Local Area Networks (WLANs)](https://csrc.nist.gov/pubs/sp/800/153/final) — bối cảnh bảo mật mạng Wi-Fi.
+- [NIST SP 800-41 Rev. 1 — Guidelines on Firewalls and Firewall Policy](https://csrc.nist.gov/pubs/sp/800/41/r1/final) — nguyên tắc firewall và chính sách lọc lưu lượng.
+- [NIST SP 800-94 — Guide to Intrusion Detection and Prevention Systems (IDPS)](https://csrc.nist.gov/pubs/sp/800/94/final) — phân biệt hệ thống phát hiện và ngăn chặn xâm nhập.
+- IEEE 802.11i — nền tảng kỹ thuật cho Robust Security Network và cơ chế bảo mật được sử dụng trong WPA2; WPA2 thường dùng AES-CCMP.
+
+> Lưu ý nội dung: WPA2/AES mạnh hơn WEP và WPA đời đầu trong nhóm chuẩn được ghi trong tài liệu học. Tuy nhiên, WPA3 là thế hệ mới hơn; không nên ghi WPA2 là chuẩn mạnh nhất hiện nay theo nghĩa tuyệt đối. Khi đề thi chỉ so sánh WEP, WPA và WPA2, WPA2/AES là đáp án phù hợp trong ba lựa chọn đó.
 
 ## Giáo trình tham khảo
 

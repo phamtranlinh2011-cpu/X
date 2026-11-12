@@ -137,10 +137,10 @@ function renderHome() {
     <section class="coverage-section" aria-labelledby="coverage-title">
       <div class="section-heading"><div><h2 id="coverage-title">Bản đồ kiến thức</h2><p>600 câu được phân bổ đều, 150 câu cho mỗi chương.</p></div><span class="source-pill">${icon('book', 13)} 25 câu / chương / đề</span></div>
       <div class="chapter-grid">
-        <article class="chapter-card" style="--accent:#71e2d1;--glow:rgba(102,227,208,.15)"><div class="chapter-number">CHAPTER 01</div><h3>Mạng máy tính và Internet</h3><p>Kiến trúc, mô hình, OSI, PDU, topology.</p><div class="chapter-bottom"><span>Ngân hàng câu hỏi</span><strong>150 câu</strong></div></article>
+        <article class="chapter-card" style="--accent:#71e2d1;--glow:rgba(102,227,208,.15)"><div class="chapter-number">CHAPTER 01</div><h3>Mạng máy tính và Internet</h3><p>Kiến trúc, OSI, PDU, topology và bảo mật Wi-Fi (WEP/WPA/WPA2).</p><div class="chapter-bottom"><span>Ngân hàng câu hỏi</span><strong>150 câu</strong></div></article>
         <article class="chapter-card" style="--accent:#b5a8ff;--glow:rgba(156,140,255,.15)"><div class="chapter-number">CHAPTER 02</div><h3>Tầng Application</h3><p>HTTP, DNS, email, FTP, phân phối file.</p><div class="chapter-bottom"><span>Ngân hàng câu hỏi</span><strong>150 câu</strong></div></article>
         <article class="chapter-card" style="--accent:#ffc17f;--glow:rgba(255,189,120,.15)"><div class="chapter-number">CHAPTER 03</div><h3>Tầng Transport</h3><p>TCP, UDP, port, segment, switching.</p><div class="chapter-bottom"><span>Ngân hàng câu hỏi</span><strong>150 câu</strong></div></article>
-        <article class="chapter-card" style="--accent:#ff91a2;--glow:rgba(255,127,145,.15)"><div class="chapter-number">CHAPTER 04</div><h3>Tầng Network</h3><p>Router, IPv4/IPv6, subnetting, VLSM.</p><div class="chapter-bottom"><span>Ngân hàng câu hỏi</span><strong>150 câu</strong></div></article>
+        <article class="chapter-card" style="--accent:#ff91a2;--glow:rgba(255,127,145,.15)"><div class="chapter-number">CHAPTER 04</div><h3>Tầng Network</h3><p>Router, IPv4/IPv6, subnetting, VLSM và bảo mật mạng (Firewall, IDS/IPS, NAT, SPI).</p><div class="chapter-bottom"><span>Ngân hàng câu hỏi</span><strong>150 câu</strong></div></article>
       </div>
     </section>
 
@@ -280,7 +280,7 @@ function renderExam() {
           ` : ''}
           <div class="question-footer">
             <span class="question-footer-note">${answer ? 'Đã ghi nhận câu trả lời của bạn.' : 'Chọn đáp án để mở khóa phần giải thích.'}</span>
-            <button class="next-button ${answer ? 'enabled' : ''}" id="next-question" type="button">${session.index === 99 ? 'Hoàn thành bài' : 'Câu tiếp theo'} ${icon('arrow', 15)}</button>
+            <button class="next-button ${answer ? 'enabled' : ''}" id="next-question" type="button" ${answer ? '' : 'disabled'}>${session.index === 99 ? 'Hoàn thành bài' : 'Câu tiếp theo'} ${icon('arrow', 15)}</button>
           </div>
         </main>
 
@@ -326,7 +326,7 @@ function openSubmitModal() {
   const blank = session.answers.length - done;
   showModal({
     title: 'Xác nhận nộp bài?',
-    message: blank ? `Bạn đã trả lời ${done}/100 câu. ${blank} câu chưa làm sẽ được tính là sai khi chấm điểm. Bạn chắc chắn muốn kết thúc lượt thi?` : 'Bạn đã hoàn thành toàn bộ câu hỏi. Xác nhận nộp bài để xem điểm và đáp án nhé.',
+    message: blank ? `Bạn đã trả lời ${done}/100 câu. ${blank} câu chưa làm sẽ không được tính điểm. Bạn chắc chắn muốn kết thúc lượt thi?` : 'Bạn đã hoàn thành toàn bộ câu hỏi. Xác nhận nộp bài để xem điểm và đáp án nhé.',
     stats: `<span>Đã trả lời <strong>${done}/100</strong></span><span>Chưa làm <strong>${blank}</strong></span>`,
     confirmText: 'Nộp bài ngay',
     onConfirm: finishExam
@@ -367,7 +367,7 @@ function finishExam() {
   document.querySelector('.modal-backdrop')?.remove();
   const correct = session.answers.reduce((sum, answer) => sum + (answer?.isCorrect ? 1 : 0), 0);
   const attempted = session.answers.filter(Boolean).length;
-  const wrong = session.questions.length - correct;
+  const wrong = attempted - correct;
   const unanswered = session.questions.length - attempted;
   session.result = {
     correct,
