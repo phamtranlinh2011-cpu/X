@@ -91,6 +91,40 @@ for (const q of questions) {
   assert(['Cơ bản', 'Tính toán cơ bản'].includes(q.difficulty), `Câu ${q.id} có nhãn độ khó ngoài phạm vi thiết kế lại`);
 }
 
+// Catch confusing answer text that looks like the A/B/C/D labels rendered by the UI.
+for (const q of questions) {
+  for (const option of q.options) {
+    assert(!/^\s*[A-D]:\s/.test(option), `Câu ${q.id} có phương án dùng nhãn A:/B:/C:/D: gây lẫn với nhãn trắc nghiệm`);
+  }
+  assert(!q.question.startsWith('Trong trường hợp thực tế này, phương án nào đúng?'), `Câu ${q.id} còn mẫu câu hỏi kép cũ`);
+}
+
+// Specific semantic regression checks: the scenario must ask for the same fact as the attached answer.
+const requireScenario = (chapter, topic, expected) => {
+  const item = BANK[chapter]?.find((entry) => entry.topic === topic);
+  assert(Boolean(item), `Thiếu chủ đề để kiểm tra tình huống: ${topic}`);
+  if (item) assert(item.scenario === expected, `Tình huống của chủ đề ${topic} không khớp nội dung đã rà soát`);
+};
+requireScenario('C1', 'Five-layer Internet stack', 'Hãy sắp xếp năm tầng của mô hình Internet/IP Stack theo thứ tự từ Application xuống Physical.');
+requireScenario('C1', 'OSI vs TCP/IP', 'Khi quy đổi mô hình OSI sang TCP/IP bốn tầng, hai tầng nào của OSI được gộp vào tầng Application?');
+requireScenario('C1', 'Application layer', 'Khi trình duyệt tải trang web bằng HTTP, HTTP là ví dụ của nhóm giao thức nào trong mô hình mạng?');
+requireScenario('C1', 'PDU names', 'Hãy ghép đúng tên PDU của các tầng từ Application xuống Physical theo thứ tự.');
+requireScenario('C3', 'Transport PDU', 'Ở tầng Transport, tên PDU của TCP và UDP lần lượt là gì?');
+requireScenario('C3', 'TCP source and destination ports', 'Trong TCP header, hai trường Source Port và Destination Port mỗi trường dài bao nhiêu bit?');
+requireScenario('C3', 'UDP port fields', 'Trong UDP header, hai trường Source Port và Destination Port mỗi trường dài bao nhiêu bit?');
+requireScenario('C3', 'TCP three-way handshake', 'Hãy chọn đúng thứ tự ba thông điệp trong quá trình TCP three-way handshake.');
+requireScenario('C3', 'UDP fields absent', 'Trong header UDP, trường nào không xuất hiện dù nó có trong header TCP?');
+requireScenario('C4', 'IPv4 class A B C D ranges', 'Hãy chọn phương án liệt kê chính xác dải octet đầu tiên của cả bốn lớp IPv4 A, B, C và D.');
+requireScenario('C4', 'Classful default masks', 'Hãy ghép subnet mask mặc định đúng cho ba lớp IPv4 A, B và C theo đúng thứ tự.');
+requireScenario('C4', 'Private and public IP', 'Theo RFC 1918, ba dải địa chỉ IPv4 nào được dành riêng cho mạng Private?');
+requireScenario('C4', 'Router role', 'Một packet cần đi từ LAN sang mạng khác. Thiết bị trung gian nào chuyển tiếp packet dựa trên địa chỉ IP đích?');
+
+const classRanges = BANK.C4.find((item) => item.topic === 'IPv4 class A B C D ranges');
+assert(classRanges?.a.startsWith('Lớp A:') && classRanges?.wrong.every((option) => option.startsWith('Lớp A:')),
+  'Các lựa chọn lớp IPv4 phải ghi rõ “Lớp A/B/C/D”, không dùng A:/B: đứng riêng dễ lẫn nhãn đáp án');
+const hex = BANK.C4.find((item) => item.topic === 'Decimal 10 to hexadecimal');
+assert(hex?.a.startsWith('Giá trị 10,') && !/^A[.)]?$/i.test(hex.a), 'Đáp án đổi 10 sang hexadecimal không được chỉ là chữ A đứng riêng dễ lẫn nhãn lựa chọn');
+
 const answerOf = (topic) => {
   const q = questions.find((item) => item.topic === topic);
   return q ? q.options[q.answerIndex] : undefined;
@@ -105,7 +139,7 @@ requireAnswer('PDU names', 'Data/Message → Segment (TCP) hoặc Datagram (UDP)
 requireAnswer('IPv4 address length', '32 bit.');
 requireAnswer('Decimal 10 to binary', '00001010.');
 requireAnswer('Binary 11101000 to decimal', '232.');
-requireAnswer('Decimal 10 to hexadecimal', 'A.');
+requireAnswer('Decimal 10 to hexadecimal', 'Giá trị 10, được biểu diễn bằng ký tự đứng ngay sau chữ số 9.');
 requireAnswer('IPv6 address length', '128 bit.');
 requireAnswer('IPv4 and IPv6 header length', 'IPv4 tối thiểu 20 byte; IPv6 base header cố định 40 byte.');
 requireAnswer('IP length fields', '16 bit.');
@@ -137,7 +171,7 @@ requireAnswer('Usable hosts /26', '62 host.');
 requireAnswer('Network address calculation', '192.168.1.64/26.');
 requireAnswer('Broadcast address calculation', '192.168.1.127.');
 requireAnswer('Usable host range /27', '192.168.10.33 đến 192.168.10.62.');
-requireAnswer('IPv4 class A B C D ranges', 'A: 1–126; B: 128–191; C: 192–223; D: 224–239 (Multicast).');
+requireAnswer('IPv4 class A B C D ranges', 'Lớp A: 1–126; lớp B: 128–191; lớp C: 192–223; lớp D: 224–239 (multicast).');
 requireAnswer('Private and public IP', '10.0.0.0/8; 172.16.0.0/12; 192.168.0.0/16.');
 requireAnswer('WEP security', 'Là chuẩn cũ, sử dụng RC4 và có nhiều điểm yếu bảo mật nên không còn được khuyến nghị.');
 requireAnswer('WPA security', 'WPA được đưa ra để khắc phục các điểm yếu của WEP; WPA đời đầu thường sử dụng TKIP.');

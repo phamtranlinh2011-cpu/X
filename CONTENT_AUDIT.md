@@ -1,4 +1,4 @@
-# CONTENT_AUDIT — NETLAB v1.3.0
+# CONTENT_AUDIT — NETLAB v1.3.1
 
 ## Phạm vi cập nhật
 
@@ -24,6 +24,24 @@
 - Mô phỏng 100 lượt random, mỗi lượt 100 câu và 25 câu/chương.
 - Kiểm tra mỗi chủ đề có 5 biến thể ở 5 đề khác nhau và đáp án/lời giải nhất quán.
 - Kiểm tra hồi quy OSI, TCP/IP, IP Stack, PDU, TCP/UDP, port, IPv4/IPv6, subnet/VLSM, đổi nhị phân/thập phân/hex, WEP/WPA/WPA2, Firewall, IDS/IPS, NAT, SPI.
+
+## Rà soát chất lượng câu hỏi — v1.3.1
+
+- Đọc rà soát toàn bộ 160 chủ đề gốc và 5 biến thể được sinh ra cho mỗi chủ đề (800 bản ghi).
+- Sửa 11 câu hỏi gốc, 14 đáp án diễn đạt chưa rõ, 33 câu tình huống và 90 nhóm phương án nhiễu.
+- Kiểm tra sự thống nhất giữa câu hỏi gốc, tình huống, đáp án đúng và lời giải; đặc biệt ở OSI/TCP-IP/IP Stack, Application, PDU, TCP three-way handshake, TCP/UDP header, port, lớp IPv4, subnet mask, địa chỉ private và vai trò router.
+- Chuẩn hóa lựa chọn về lớp IPv4 thành `Lớp A:`, `lớp B:`... để không tạo cảm giác lựa chọn A/B/C/D bị lặp hoặc lộ đáp án.
+- Chỉnh câu thập phân 10 sang hexadecimal để không có phương án đúng chỉ là ký tự `A` trùng với nhãn lựa chọn `A.`.
+- Thay nhiều phương án nhiễu ngoài chủ đề bằng phương án cùng nhóm kiến thức hơn, ví dụ giao thức DNS/HTTP, trường TCP, bảo mật Wi-Fi, IDS/IPS và thiết bị mạng.
+- Bổ sung validator hồi quy cho các câu/tình huống đại diện và quy tắc bắt lỗi nhãn `A:`/`B:` đứng đầu phương án.
+
+## Kiểm tra sau chỉnh sửa v1.3.1
+
+- `npm run check` — PASS.
+- `node --check app.js` — PASS.
+- `node --check questions.js` — PASS.
+- Kiểm tra đủ 800 bản ghi, 8 đề, 100 lượt random mô phỏng, đáp án cân bằng A/B/C/D và các hồi quy nội dung — PASS.
+- Kiểm thử thao tác trình duyệt vẫn bị giới hạn bởi môi trường (`ERR_BLOCKED_BY_ADMINISTRATOR`); cần xác nhận lại trên máy cá nhân hoặc URL Vercel sau deploy.
 
 ## Giới hạn xác minh
 
